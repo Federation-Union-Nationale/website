@@ -1,0 +1,2134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FUN - Fédération Union Nationale</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Modern Color Palette */
+      --primary: #2A5298;
+      --primary-light: #3A67B2;
+      --primary-dark: #1D3C72;
+      --secondary: #E63946;
+      --secondary-light: #FF4D5A;
+      --secondary-dark: #C32E3B;
+      --accent: #2EC4B6;
+      --accent-light: #3EDFD0;
+      --accent-dark: #21A397;
+      --neutral-100: #FFFFFF;
+      --neutral-200: #F8F9FA;
+      --neutral-300: #E9ECEF;
+      --neutral-400: #DEE2E6;
+      --neutral-500: #ADB5BD;
+      --neutral-600: #6C757D;
+      --neutral-700: #495057;
+      --neutral-800: #343A40;
+      --neutral-900: #212529;
+      
+      /* Typography */
+      --font-primary: 'Montserrat', sans-serif;
+      --font-secondary: 'Poppins', sans-serif;
+      
+      /* Spacing */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-xxl: 3rem;
+      
+      /* Shadows */
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+      --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+      --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+      
+      /* Border Radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 1rem;
+      --radius-full: 9999px;
+      
+      /* Transitions */
+      --transition-fast: 0.2s ease;
+      --transition-medium: 0.3s ease;
+      --transition-slow: 0.5s ease;
+    }
+    
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+    
+    body {
+      font-family: var(--font-primary);
+      color: var(--neutral-800);
+      line-height: 1.6;
+      background-color: var(--neutral-200);
+      overflow-x: hidden;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-secondary);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: var(--space-md);
+      color: var(--neutral-900);
+    }
+    
+    h1 { font-size: 3.052rem; }
+    h2 { font-size: 2.441rem; }
+    h3 { font-size: 1.953rem; }
+    h4 { font-size: 1.563rem; }
+    h5 { font-size: 1.25rem; }
+    h6 { font-size: 1rem; }
+    
+    p {
+      margin-bottom: var(--space-md);
+    }
+    
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color var(--transition-fast);
+    }
+    
+    a:hover {
+      color: var(--primary-light);
+    }
+    
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--space-lg);
+    }
+    
+    /* Header & Navigation */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: var(--neutral-100);
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-medium);
+    }
+    
+    .header-scrolled {
+      padding: var(--space-sm) 0;
+      background-color: rgba(255, 255, 255, 0.98);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-md) 0;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .logo span {
+      color: var(--secondary);
+    }
+    
+    .nav {
+      display: flex;
+      align-items: center;
+    }
+    
+    .nav-list {
+      display: flex;
+      gap: var(--space-lg);
+      list-style: none;
+    }
+    
+    .nav-item a {
+      font-weight: 500;
+      padding: var(--space-xs) var(--space-sm);
+      position: relative;
+      color: var(--neutral-700);
+      transition: color var(--transition-fast);
+    }
+    
+    .nav-item a:hover,
+    .nav-item a.active {
+      color: var(--primary);
+    }
+    
+    .nav-item a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -2px;
+      left: 50%;
+      background-color: var(--primary);
+      transition: all var(--transition-medium);
+      transform: translateX(-50%);
+    }
+    
+    .nav-item a:hover::after,
+    .nav-item a.active::after {
+      width: 100%;
+    }
+    
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--neutral-700);
+    }
+    
+    /* Mobile Navigation */
+    .mobile-nav {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 400px;
+      height: 100vh;
+      background-color: var(--neutral-100);
+      padding: var(--space-xl);
+      transition: right var(--transition-medium);
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .mobile-nav.active {
+      right: 0;
+    }
+    
+    .mobile-nav-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xl);
+    }
+    
+    .close-menu-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: var(--neutral-700);
+    }
+    
+    .mobile-nav-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-lg);
+    }
+    
+    .mobile-nav-item a {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--neutral-800);
+      display: block;
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--neutral-300);
+    }
+    
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-medium);
+    }
+    
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, rgba(42, 82, 152, 0.8) 0%, rgba(230, 57, 70, 0.8) 100%), url('/api/placeholder/1920/1080') center/cover no-repeat;
+      padding: 12rem 0 6rem;
+      color: var(--neutral-100);
+      position: relative;
+    }
+    
+    .hero-content {
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .hero-title {
+      font-size: 3.5rem;
+      margin-bottom: var(--space-lg);
+      color: var(--neutral-100);
+    }
+    
+    .hero-subtitle {
+      font-size: 1.5rem;
+      margin-bottom: var(--space-xl);
+      font-weight: 400;
+    }
+    
+    .hero-cta {
+      display: inline-flex;
+      gap: var(--space-md);
+    }
+    
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-sm);
+      padding: var(--space-md) var(--space-lg);
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+    
+    .btn-primary {
+      background-color: var(--primary);
+      color: var(--neutral-100);
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      color: var(--neutral-100);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary);
+      color: var(--neutral-100);
+    }
+    
+    .btn-secondary:hover {
+      background-color: var(--secondary-dark);
+      color: var(--neutral-100);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      color: var(--neutral-100);
+      border: 2px solid var(--neutral-100);
+    }
+    
+    .btn-outline:hover {
+      background-color: var(--neutral-100);
+      color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    /* Scroll Down Arrow */
+    .scroll-down {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+      color: var(--neutral-100);
+      font-size: 1.5rem;
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+      40% { transform: translateY(-20px) translateX(-50%); }
+      60% { transform: translateY(-10px) translateX(-50%); }
+    }
+    
+    /* Section Styling */
+    section {
+      padding: var(--space-xxl) 0;
+    }
+    
+    .section-header {
+      margin-bottom: var(--space-xl);
+      text-align: center;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-sm);
+      position: relative;
+      display: inline-block;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 4px;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--secondary);
+      border-radius: var(--radius-full);
+    }
+    
+    .section-description {
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--neutral-600);
+      font-size: 1.1rem;
+    }
+    
+    /* News Cards */
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: var(--space-xl);
+    }
+    
+    .news-card {
+      background-color: var(--neutral-100);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-medium);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .news-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-xl);
+    }
+    
+    .news-img {
+      position: relative;
+      overflow: hidden;
+      height: 220px;
+    }
+    
+    .news-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-medium);
+    }
+    
+    .news-card:hover .news-img img {
+      transform: scale(1.05);
+    }
+    
+    .news-date {
+      position: absolute;
+      top: var(--space-md);
+      right: var(--space-md);
+      background-color: var(--primary);
+      color: var(--neutral-100);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+    
+    .news-content {
+      padding: var(--space-xl);
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+    
+    .news-tag {
+      display: inline-block;
+      background-color: var(--accent-light);
+      color: var(--neutral-900);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-full);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .news-title {
+      font-size: 1.25rem;
+      margin-bottom: var(--space-md);
+      color: var(--neutral-900);
+      min-height: 3em;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .news-excerpt {
+      color: var(--neutral-700);
+      margin-bottom: var(--space-lg);
+      flex-grow: 1;
+    }
+    
+    .news-footer {
+      margin-top: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .news-btn {
+      color: var(--primary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      transition: all var(--transition-fast);
+    }
+    
+    .news-btn:hover {
+      color: var(--primary-dark);
+      transform: translateX(3px);
+    }
+    
+    /* Network Chart */
+    .network-container {
+      background-color: var(--neutral-100);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      height: 600px;
+      position: relative;
+    }
+    
+    /* Map Section */
+    .map-container {
+      background-color: var(--neutral-100);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      height: 500px;
+      position: relative;
+    }
+    
+    /* Federation Section */
+    .federation-section {
+      position: relative;
+      background-color: var(--primary-dark);
+      color: var(--neutral-100);
+      padding: var(--space-xxl) 0;
+    }
+    
+    .federation-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('/api/placeholder/1920/1080') center/cover no-repeat;
+      opacity: 0.1;
+    }
+    
+    .federation-section .section-title {
+      color: var(--neutral-100);
+    }
+    
+    .federation-section .section-title::after {
+      background-color: var(--neutral-100);
+    }
+    
+    .federation-section .section-description {
+      color: var(--neutral-300);
+    }
+    
+    .federation-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xl);
+      margin-top: var(--space-xl);
+    }
+    
+    .federation-text {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .federation-video {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .video-container {
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%; /* 16:9 */
+      height: 0;
+      overflow: hidden;
+    }
+    
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    /* Associations Section */
+    .associations-container {
+      margin-top: var(--space-xl);
+    }
+    
+    .search-container {
+      margin-bottom: var(--space-xl);
+      position: relative;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: var(--space-md) var(--space-lg);
+      padding-left: 3rem;
+      border: 1px solid var(--neutral-400);
+      border-radius: var(--radius-full);
+      font-size: 1rem;
+      transition: all var(--transition-fast);
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.2);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: var(--space-lg);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--neutral-500);
+    }
+    
+    .associations-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-lg);
+    }
+    
+    .association-card {
+      background-color: var(--neutral-100);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-medium);
+      border-top: 4px solid var(--primary);
+    }
+    
+    .association-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .association-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: var(--space-md);
+    }
+    
+    .association-logo {
+      width: 60px;
+      height: 60px;
+      background-color: var(--neutral-200);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    
+    .association-title {
+      font-size: 1.25rem;
+      margin-bottom: var(--space-xs);
+    }
+    
+    .association-location {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      color: var(--neutral-600);
+      font-size: 0.875rem;
+      margin-bottom: var(--space-md);
+    }
+    
+    .association-projects {
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--neutral-300);
+    }
+    
+    .project-list {
+      list-style: none;
+    }
+    
+    .project-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-xs);
+      color: var(--neutral-700);
+    }
+    
+    /* Media Section */
+    .media-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: var(--space-xl);
+    }
+    
+    .media-card {
+      background-color: var(--neutral-100);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-medium);
+    }
+    
+    .media-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .media-thumbnail {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+    }
+    
+    .media-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--transition-medium);
+    }
+    
+    .media-card:hover .media-thumbnail img {
+      transform: scale(1.05);
+    }
+    
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px;
+      height: 60px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 1.5rem;
+      transition: all var(--transition-fast);
+    }
+    
+    .media-card:hover .play-button {
+      background-color: var(--neutral-100);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+    
+    .media-content {
+      padding: var(--space-lg);
+    }
+    
+    .media-title {
+      font-size: 1.1rem;
+      margin-bottom: var(--space-sm);
+    }
+    
+    .media-description {
+      color: var(--neutral-600);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+      background-color: var(--secondary);
+      color: var(--neutral-100);
+      padding: var(--space-xxl) 0;
+      text-align: center;
+    }
+    
+    .cta-title {
+      font-size: 2.5rem;
+      margin-bottom: var(--space-lg);
+      color: var(--neutral-100);
+    }
+    
+    .cta-description {
+      max-width: 700px;
+      margin: 0 auto var(--space-xl);
+      font-size: 1.1rem;
+    }
+    
+    /* Members Section */
+    .members-section {
+      background-color: var(--neutral-200);
+    }
+    
+    .members-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xl);
+    }
+    
+    .login-form-container {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .login-form {
+      background-color: var(--neutral-100);
+      padding: var(--space-xl);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .form-group {
+      margin-bottom: var(--space-md);
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: var(--space-xs);
+      font-weight: 500;
+      color: var(--neutral-700);
+    }
+    
+    .form-input {
+      width: 100%;
+      padding: var(--space-md);
+      border: 1px solid var(--neutral-400);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      transition: all var(--transition-fast);
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(42, 82, 152, 0.2);
+    }
+    
+    .members-benefits {
+      flex: 1;
+      min-width: 300px;
+    }
+    
+    .benefits-list {
+      list-style: none;
+    }
+    
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+      background-color: var(--neutral-100);
+      padding: var(--space-lg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .benefit-icon {
+      flex-shrink: 0;
+      width: 50px;
+      height: 50px;
+      background-color: var(--primary-light);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--neutral-100);
+      font-size: 1.25rem;
+    }
+    
+    .benefit-content h4 {
+      margin-bottom: var(--space-xs);
+      font-size: 1.1rem;
+    }
+    
+    .benefit-content p {
+      color: var(--neutral-600);
+      margin-bottom: 0;
+    }
+    
+    /* Footer */
+    .footer {
+      background-color: var(--neutral-900);
+      color: var(--neutral-400);
+      padding: var(--space-xxl) 0 var(--space-lg);
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--space-xl);
+    }
+    
+    .footer-column {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--neutral-100);
+      margin-bottom: var(--space-md);
+    }
+    
+    .footer-logo span {
+      color: var(--secondary);
+    }
+    
+    .footer-description {
+      margin-bottom: var(--space-lg);
+      color: var(--neutral-500);
+    }
+    
+    .footer-heading {
+      font-size: 1.1rem;
+      color: var(--neutral-100);
+      margin-bottom: var(--space-lg);
+      position: relative;
+      padding-bottom: var(--space-sm);
+    }
+    
+    .footer-heading::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 3px;
+      background-color: var(--secondary);
+      border-radius: var(--radius-full);
+    }
+    
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+    
+    .footer-link {
+      color: var(--neutral-500);
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    
+    .footer-link:hover {
+      color: var(--neutral-100);
+      transform: translateX(3px);
+    }
+    
+    .footer-contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    
+    .contact-icon {
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      color: var(--secondary);
+    }
+    
+    .contact-text {
+      color: var(--neutral-500);
+      font-size: 0.9rem;
+    }
+    
+    .sponsors-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+    
+    .sponsor-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-sm);
+      border-radius: var(--radius-md);
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+    
+    .sponsor-logo {
+      width: 40px;
+      height: 40px;
+      background-color: var(--neutral-800);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--neutral-100);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    
+    .sponsor-content {
+      font-size: 0.9rem;
+    }
+    
+    .sponsor-name {
+      color: var(--neutral-300);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+    
+    .sponsor-type {
+      color: var(--secondary);
+      font-size: 0.8rem;
+    }
+    
+    .footer-social {
+      display: flex;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    
+    .social-link {
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--neutral-100);
+      transition: all var(--transition-fast);
+    }
+    
+    .social-link:hover {
+      background-color: var(--secondary);
+      color: var(--neutral-100);
+      transform: translateY(-3px);
+    }
+    
+    .footer-bottom {
+      margin-top: var(--space-xxl);
+      padding-top: var(--space-lg);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: var(--space-md);
+    }
+    
+    .copyright {
+      color: var(--neutral-500);
+      font-size: 0.9rem;
+    }
+    
+    .footer-bottom-links {
+      display: flex;
+      gap: var(--space-lg);
+    }
+    
+    .footer-bottom-link {
+      color: var(--neutral-500);
+      font-size: 0.9rem;
+      transition: color var(--transition-fast);
+    }
+    
+    .footer-bottom-link:hover {
+      color: var(--neutral-100);
+    }
+    
+    /* Utility Classes */
+    .text-center { text-align: center; }
+    .mt-sm { margin-top: var(--space-sm); }
+    .mt-md { margin-top: var(--space-md); }
+    .mt-lg { margin-top: var(--space-lg); }
+    .mt-xl { margin-top: var(--space-xl); }
+    .mb-sm { margin-bottom: var(--space-sm); }
+    .mb-md { margin-bottom: var(--space-md); }
+    .mb-lg { margin-bottom: var(--space-lg); }
+    .mb-xl { margin-bottom: var(--space-xl); }
+    
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 1s forwards;
+    }
+    
+    .fade-in-up {
+      animation: fadeInUp 1s forwards;
+    }
+    
+    .fade-in-right {
+      animation: fadeInRight 1s forwards;
+    }
+    
+    .fade-in-left {
+      animation: fadeInLeft 1s forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInRight {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes fadeInLeft {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 1024px) {
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 2rem; }
+      h3 { font-size: 1.75rem; }
+      
+      .hero-title { font-size: 2.5rem; }
+      .hero-subtitle { font-size: 1.25rem; }
+      .section-title { font-size: 2rem; }
+    }
+    
+    @media (max-width: 768px) {
+      .nav-list {
+        display: none;
+      }
+      
+      .mobile-menu-btn {
+        display: block;
+      }
+      
+      .hero {
+        padding: 8rem 0 4rem;
+      }
+      
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .hero-cta {
+        flex-direction: column;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+      
+      .btn {
+        width: 100%;
+      }
+      
+      .federation-content {
+        flex-direction: column;
+      }
+      
+      .news-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      }
+    }
+    
+    @media (max-width: 480px) {
+      html {
+        font-size: 14px;
+      }
+      
+      .container {
+        padding: 0 var(--space-md);
+      }
+      
+      .section-title {
+        font-size: 1.75rem;
+      }
+      
+      .hero-title {
+        font-size: 1.75rem;
+      }
+      
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .news-grid, 
+      .associations-list,
+      .media-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header" id="header">
+    <div class="container">
+      <div class="header-container">
+        <a href="#" class="logo">
+          <i class="fas fa-network-wired"></i> 
+          <span>F</span>UN
+        </a>
+        <nav class="nav">
+          <ul class="nav-list">
+            <li class="nav-item"><a href="#accueil" class="active">Accueil</a></li>
+            <li class="nav-item"><a href="#actualites">Actualités</a></li>
+            <li class="nav-item"><a href="#reseau">Notre Réseau</a></li>
+            <li class="nav-item"><a href="#projets">Projets</a></li>
+            <li class="nav-item"><a href="#federation">Fédération</a></li>
+            <li class="nav-item"><a href="#associations">Associations</a></li>
+            <li class="nav-item"><a href="#media">MÉDIA</a></li>
+            <li class="nav-item"><a href="#adherents">Adhérents</a></li>
+            <li class="nav-item"><a href="#membres">Membres</a></li>
+          </ul>
+          <button class="mobile-menu-btn" aria-label="Menu" id="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+          </button>
+        </nav>
+      </div>
+    </div>
+  </header>
+  
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" id="mobile-nav">
+    <div class="mobile-nav-header">
+      <a href="#" class="logo">
+        <i class="fas fa-network-wired"></i>
+        <span>F</span>UN
+      </a>
+      <button class="close-menu-btn" id="close-menu-btn" aria-label="Fermer le menu">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <ul class="mobile-nav-list">
+      <li class="mobile-nav-item"><a href="#accueil">Accueil</a></li>
+      <li class="mobile-nav-item"><a href="#actualites">Actualités</a></li>
+      <li class="mobile-nav-item"><a href="#reseau">Notre Réseau</a></li>
+      <li class="mobile-nav-item"><a href="#projets">Projets</a></li>
+      <li class="mobile-nav-item"><a href="#federation">Fédération</a></li>
+      <li class="mobile-nav-item"><a href="#associations">Associations</a></li>
+      <li class="mobile-nav-item"><a href="#media">MÉDIA</a></li>
+      <li class="mobile-nav-item"><a href="#adherents">Adhérents</a></li>
+      <li class="mobile-nav-item"><a href="#membres">Espace Membres</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay"></div>
+  
+  <!-- Hero Section -->
+  <section class="hero" id="accueil">
+    <div class="container">
+      <div class="hero-content fade-in">
+        <h1 class="hero-title">Fédération Union Nationale</h1>
+        <p class="hero-subtitle">Un groupement dynamique de collectifs, d'associations et de personnes engagées pour développer des projets d'avenir partout en France.</p>
+        <div class="hero-cta">
+          <a href="#reseau" class="btn btn-primary">
+            <i class="fas fa-network-wired"></i> Découvrir notre réseau
+          </a>
+          <a href="#adherents" class="btn btn-outline">
+            <i class="fas fa-user-plus"></i> Devenir adhérent
+          </a>
+        </div>
+      </div>
+    </div>
+    <a href="#actualites" class="scroll-down">
+      <i class="fas fa-chevron-down"></i>
+    </a>
+  </section>
+  
+  <main>
+    <!-- Actualités Section -->
+    <section id="actualites" class="section-news">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Dernières Actualités</h2>
+          <p class="section-description">Restez informés des dernières initiatives, événements et projets de la Fédération Union Nationale et de ses membres.</p>
+        </div>
+        
+        <div class="news-grid">
+          <!-- News Card 1 -->
+          <article class="news-card fade-in">
+            <div class="news-img">
+              <img src="/api/placeholder/600/400" alt="Projet Villes Vertes" />
+              <div class="news-date">1 mars 2025</div>
+            </div>
+            <div class="news-content">
+              <span class="news-tag">Environnement</span>
+              <h3 class="news-title">Lancement du projet "Villes Vertes"</h3>
+              <p class="news-excerpt">
+                La FUN lance un grand projet national pour transformer les espaces urbains en lieux plus écologiques et conviviaux. Découvrez comment participer à cette initiative ambitieuse.
+              </p>
+              <div class="news-footer">
+                <a href="#" class="news-btn">
+                  Lire plus <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+          
+          <!-- News Card 2 -->
+          <article class="news-card fade-in">
+            <div class="news-img">
+              <img src="/api/placeholder/600/400" alt="Convention Nationale" />
+              <div class="news-date">25 février 2025</div>
+            </div>
+            <div class="news-content">
+              <span class="news-tag">Événement</span>
+              <h3 class="news-title">Rejoignez la convention nationale à Lyon</h3>
+              <p class="news-excerpt">
+                Notre grande convention annuelle se tiendra à Lyon du 15 au 17 avril. Inscrivez-vous dès maintenant pour participer aux ateliers, conférences et tables rondes.
+              </p>
+              <div class="news-footer">
+                <a href="#" class="news-btn">
+                  Lire plus <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+          
+          <!-- News Card 3 -->
+          <article class="news-card fade-in">
+            <div class="news-img">
+              <img src="/api/placeholder/600/400" alt="Partenariat Ministériel" />
+              <div class="news-date">18 février 2025</div>
+            </div>
+            <div class="news-content">
+              <span class="news-tag">Partenariat</span>
+              <h3 class="news-title">Nouveau partenariat avec le Ministère de la Transition Écologique</h3>
+              <p class="news-excerpt">
+                La FUN signe une convention historique pour démultiplier l'impact de ses actions environnementales et soutenir les initiatives locales.
+              </p>
+              <div class="news-footer">
+                <a href="#" class="news-btn">
+                  Lire plus <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Réseau Section -->
+    <section id="reseau" class="section-network">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Notre Réseau</h2>
+          <p class="section-description">
+            Découvrez l'écosystème vibrant des membres et partenaires de la FUN. Chaque bulle représente une organisation, et les liens montrent leurs collaborations actives.
+          </p>
+        </div>
+        
+        <div class="network-container fade-in" id="bubble-chart"></div>
+      </div>
+    </section>
+    
+    <!-- Projets Section -->
+    <section id="projets" class="section-projects">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Projets et Événements</h2>
+          <p class="section-description">
+            Explorez notre carte interactive pour découvrir les projets et événements FUN près de chez vous. Filtrez par région, type de projet ou thématique.
+          </p>
+        </div>
+        
+        <div class="map-container fade-in">
+          <iframe
+            width="100%"
+            height="500"
+            style="border:0"
+            loading="lazy"
+            allowfullscreen
+            src="https://www.google.com/maps/embed/v1/view?key=NO_API_KEY_NEEDED&center=46.2276,2.2137&zoom=6&maptype=roadmap">
+          </iframe>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Fédération Section -->
+    <section id="federation" class="federation-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">À propos de la Fédération</h2>
+          <p class="section-description">
+            La Fédération Union Nationale rassemble des collectifs et associations engagés dans des missions sociales, environnementales et culturelles.
+          </p>
+        </div>
+        
+        <div class="federation-content">
+          <div class="federation-text fade-in-right">
+            <h3>Notre Vision</h3>
+            <p>
+              Nous croyons en un monde où l'engagement citoyen, la solidarité et l'innovation sociale peuvent transformer positivement notre société. Notre fédération soutient les initiatives locales et favorise les synergies entre acteurs du changement.
+            </p>
+            <h3 class="mt-lg">Nos Missions</h3>
+            <p>
+              Soutenir les associations membres, développer des projets innovants, représenter le réseau auprès des institutions, et partager les bonnes pratiques sont au cœur de notre action quotidienne.
+            </p>
+            <a href="#" class="btn btn-secondary mt-lg">En savoir plus</a>
+          </div>
+          
+          <div class="federation-video fade-in-left">
+            <div class="video-container">
+              <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/samplevideo" title="Présentation de la Fédération" allowfullscreen></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Associations Section -->
+    <section id="associations" class="section-associations">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Associations Membres</h2>
+          <p class="section-description">
+            Découvrez les associations qui composent notre réseau et contribuent à l'impact de la FUN sur tout le territoire.
+          </p>
+        </div>
+        
+        <div class="associations-container">
+          <div class="search-container fade-in">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Rechercher par nom, localité ou projet" aria-label="Recherche Associations">
+          </div>
+          
+          <div class="associations-list">
+            <!-- Association Card 1 -->
+            <article class="association-card fade-in">
+              <div class="association-header">
+                <div>
+                  <h3 class="association-title">Éco-Collectif</h3>
+                  <div class="association-location">
+                    <i class="fas fa-map-marker-alt"></i> Paris
+                  </div>
+                </div>
+                <div class="association-logo">
+                  <i class="fas fa-leaf"></i>
+                </div>
+              </div>
+              <div class="association-projects">
+                <h4>Projets</h4>
+                <ul class="project-list">
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Jardins partagés urbains
+                  </li>
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Ateliers zéro-déchet
+                  </li>
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Sensibilisation écologique
+                  </li>
+                </ul>
+              </div>
+            </article>
+            
+            <!-- Association Card 2 -->
+            <article class="association-card fade-in">
+              <div class="association-header">
+                <div>
+                  <h3 class="association-title">Solidarité France</h3>
+                  <div class="association-location">
+                    <i class="fas fa-map-marker-alt"></i> Lyon
+                  </div>
+                </div>
+                <div class="association-logo">
+                  <i class="fas fa-hands-helping"></i>
+                </div>
+              </div>
+              <div class="association-projects">
+                <h4>Projets</h4>
+                <ul class="project-list">
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Aide alimentaire
+                  </li>
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Accompagnement social
+                  </li>
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Insertion professionnelle
+                  </li>
+                </ul>
+              </div>
+            </article>
+            
+            <!-- Association Card 3 -->
+            <article class="association-card fade-in">
+              <div class="association-header">
+                <div>
+                  <h3 class="association-title">Jeunesse Engagée</h3>
+                  <div class="association-location">
+                    <i class="fas fa-map-marker-alt"></i> Bordeaux
+                  </div>
+                </div>
+                <div class="association-logo">
+                  <i class="fas fa-graduation-cap"></i>
+                </div>
+              </div>
+              <div class="association-projects">
+                <h4>Projets</h4>
+                <ul class="project-list">
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Mentorat éducatif
+                  </li>
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Initiatives citoyennes
+                  </li>
+                  <li class="project-item">
+                    <i class="fas fa-check"></i> Débats démocratiques
+                  </li>
+                </ul>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Media Section -->
+    <section id="media" class="section-media">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">MÉDIA</h2>
+          <p class="section-description">
+            Retrouvez ici des vidéos et actualités essentielles pour faciliter la compréhension de nos actions et partenariats.
+          </p>
+        </div>
+        
+        <div class="media-grid">
+          <!-- Media Card 1 -->
+          <article class="media-card fade-in">
+            <div class="media-thumbnail">
+              <img src="/api/placeholder/600/400" alt="Vidéo présentation" />
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+            <div class="media-content">
+              <h3 class="media-title">Comprendre le fonctionnement de la FUN</h3>
+              <p class="media-description">
+                Une présentation claire et concise du rôle et de l'organisation de notre fédération.
+              </p>
+            </div>
+          </article>
+          
+          <!-- Media Card 2 -->
+          <article class="media-card fade-in">
+            <div class="media-thumbnail">
+              <img src="/api/placeholder/600/400" alt="Vidéo interview" />
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+            <div class="media-content">
+              <h3 class="media-title">Interview du Président de la FUN</h3>
+              <p class="media-description">
+                Découvrez la vision et les ambitions futures de notre fédération.
+              </p>
+            </div>
+          </article>
+          
+          <!-- Media Card 3 -->
+          <article class="media-card fade-in">
+            <div class="media-thumbnail">
+              <img src="/api/placeholder/600/400" alt="Vidéo projets" />
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+            <div class="media-content">
+              <h3 class="media-title">Projets marquants 2024</h3>
+              <p class="media-description">
+                Retour sur les initiatives phares de l'année écoulée et leurs impacts.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section id="adherents" class="cta-section">
+      <div class="container">
+        <h2 class="cta-title fade-in">Rejoignez la FUN</h2>
+        <p class="cta-description fade-in">
+          En devenant adhérent, accédez à des tarifs spéciaux, des formations exclusives et intégrez un réseau dynamique d'acteurs engagés.
+        </p>
+        <a href="adhesion_form.pdf" class="btn btn-outline fade-in" download>
+          <i class="fas fa-download"></i> Télécharger le formulaire d'adhésion
+        </a>
+      </div>
+    </section>
+    
+    <!-- Members Section -->
+    <section id="membres" class="members-section">
+      <div class="container">
+        <div class="section-header fade-in">
+          <h2 class="section-title">Espace Membres</h2>
+          <p class="section-description">
+            Accès privé et sécurisé pour les membres de la FUN. Connectez-vous pour accéder à toutes les ressources.
+          </p>
+        </div>
+        
+        <div class="members-container">
+          <div class="login-form-container fade-in-right">
+            <form class="login-form" id="login-form">
+              <div class="form-group">
+                <label for="username" class="form-label">Nom d'utilisateur</label>
+                <input type="text" id="username" name="username" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="password" class="form-label">Mot de passe</label>
+                <input type="password" id="password" name="password" class="form-input" required>
+              </div>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt"></i> Se connecter
+              </button>
+              <p class="mt-md">
+                <a href="#">Mot de passe oublié ?</a>
+              </p>
+            </form>
+          </div>
+          
+          <div class="members-benefits fade-in-left">
+            <h3>Avantages membres</h3>
+            <ul class="benefits-list">
+              <li class="benefit-item">
+                <div class="benefit-icon">
+                  <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="benefit-content">
+                  <h4>Documents et ressources</h4>
+                  <p>Accédez à notre bibliothèque de documents, guides et outils exclusifs.</p>
+                </div>
+              </li>
+              <li class="benefit-item">
+                <div class="benefit-icon">
+                  <i class="fas fa-comments"></i>
+                </div>
+                <div class="benefit-content">
+                  <h4>Forum d'échange</h4>
+                  <p>Partagez vos expériences et posez vos questions à la communauté.</p>
+                </div>
+              </li>
+              <li class="benefit-item">
+                <div class="benefit-icon">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="benefit-content">
+                  <h4>Agenda partagé</h4>
+                  <p>Consultez et partagez les événements à venir sur tout le territoire.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <div class="footer-logo">
+            <i class="fas fa-network-wired"></i> <span>F</span>UN
+          </div>
+          <p class="footer-description">
+            La Fédération Union Nationale est un groupement de collectifs, associations et individus engagés pour un avenir meilleur et plus solidaire.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="social-link" aria-label="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="LinkedIn">
+              <i class="fab fa-linkedin-in"></i>
+            </a>
+            <a href="#" class="social-link" aria-label="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-heading">Liens Rapides</h3>
+          <ul class="footer-links">
+            <li><a href="#accueil" class="footer-link"><i class="fas fa-home"></i> Accueil</a></li>
+            <li><a href="#actualites" class="footer-link"><i class="fas fa-newspaper"></i> Actualités</a></li>
+            <li><a href="#reseau" class="footer-link"><i class="fas fa-network-wired"></i> Notre Réseau</a></li>
+            <li><a href="#projets" class="footer-link"><i class="fas fa-project-diagram"></i> Projets</a></li>
+            <li><a href="#federation" class="footer-link"><i class="fas fa-building"></i> Fédération</a></li>
+            <li><a href="#associations" class="footer-link"><i class="fas fa-users"></i> Associations</a></li>
+            <li><a href="#media" class="footer-link"><i class="fas fa-photo-video"></i> MÉDIA</a></li>
+            <li><a href="#adherents" class="footer-link"><i class="fas fa-user-plus"></i> Adhérents</a></li>
+            <li><a href="#membres" class="footer-link"><i class="fas fa-lock"></i> Espace Membres</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-heading">Contact</h3>
+          <div class="footer-contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-text">
+              contact@fun-federation.fr
+            </div>
+          </div>
+          <div class="footer-contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div class="contact-text">
+              +33 1 23 45 67 89
+            </div>
+          </div>
+          <div class="footer-contact-item">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div class="contact-text">
+              123 Avenue de la République<br>
+              75011 Paris, France
+            </div>
+          </div>
+        </div>
+        
+        <div class="footer-column">
+          <h3 class="footer-heading">Sponsors</h3>
+          <div class="sponsors-list">
+            <div class="sponsor-item">
+              <div class="sponsor-logo">S1</div>
+              <div class="sponsor-content">
+                <div class="sponsor-name">Sponsor 1</div>
+                <div class="sponsor-type">Projets environnementaux</div>
+              </div>
+            </div>
+            <div class="sponsor-item">
+              <div class="sponsor-logo">S2</div>
+              <div class="sponsor-content">
+                <div class="sponsor-name">Sponsor 2</div>
+                <div class="sponsor-type">Initiatives culturelles</div>
+              </div>
+            </div>
+            <div class="sponsor-item">
+              <div class="sponsor-logo">S3</div>
+              <div class="sponsor-content">
+                <div class="sponsor-name">Sponsor 3</div>
+                <div class="sponsor-type">Actions solidaires</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <div class="copyright">
+          © 2025 FUN - Fédération Union Nationale. Tous droits réservés.
+        </div>
+        <div class="footer-bottom-links">
+          <a href="#" class="footer-bottom-link">Mentions légales</a>
+          <a href="#" class="footer-bottom-link">Politique de confidentialité</a>
+          <a href="#" class="footer-bottom-link">Conditions d'utilisation</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Header Scroll Effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        header.classList.add('header-scrolled');
+      } else {
+        header.classList.remove('header-scrolled');
+      }
+    });
+    
+    // Mobile Menu
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const closeMenuBtn = document.getElementById('close-menu-btn');
+    const mobileNav = document.getElementById('mobile-nav');
+    const overlay = document.getElementById('overlay');
+    
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileNav.classList.add('active');
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+    
+    function closeMenu() {
+      mobileNav.classList.remove('active');
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    
+    closeMenuBtn.addEventListener('click', closeMenu);
+    overlay.addEventListener('click', closeMenu);
+    
+    // D3.js Network Chart
+    const networkData = {
+      nodes: [
+        { id: "FUN", group: 0, name: "FUN - Fédération", size: 25 },
+        { id: "ECO", group: 1, name: "Éco-Collectif", size: 15 },
+        { id: "SOL", group: 1, name: "Solidarité France", size: 15 },
+        { id: "JEU", group: 1, name: "Jeunesse Engagée", size: 14 },
+        { id: "ART", group: 1, name: "Art & Culture", size: 13 },
+        { id: "TEC", group: 1, name: "Tech For Good", size: 12 },
+        { id: "EDU", group: 2, name: "Éducation Pour Tous", size: 10 },
+        { id: "AGR", group: 2, name: "Agri Durable", size: 10 },
+        { id: "HAB", group: 2, name: "Habitat Partagé", size: 9 },
+        { id: "MOB", group: 2, name: "Mobilité Verte", size: 9 },
+        { id: "SAN", group: 3, name: "Santé Solidaire", size: 8 },
+        { id: "ALI", group: 3, name: "Alimentation Locale", size: 8 },
+        { id: "EMP", group: 3, name: "Emploi Inclusif", size: 7 },
+        { id: "CLI", group: 3, name: "Climat Action", size: 7 },
+        { id: "DIV", group: 4, name: "Diversité & Inclusion", size: 6 },
+        { id: "SEN", group: 4, name: "Seniors Actifs", size: 6 },
+        { id: "RUR", group: 4, name: "Ruralité Vivante", size: 5 },
+        { id: "INT", group: 4, name: "International", size: 5 }
+      ],
+      links: [
+        { source: "FUN", target: "ECO", value: 10 },
+        { source: "FUN", target: "SOL", value: 10 },
+        { source: "FUN", target: "JEU", value: 10 },
+        { source: "FUN", target: "ART", value: 8 },
+        { source: "FUN", target: "TEC", value: 8 },
+        { source: "ECO", target: "AGR", value: 5 },
+        { source: "ECO", target: "CLI", value: 5 },
+        { source: "ECO", target: "MOB", value: 4 },
+        { source: "SOL", target: "SAN", value: 5 },
+        { source: "SOL", target: "EMP", value: 5 },
+        { source: "SOL", target: "DIV", value: 4 },
+        { source: "JEU", target: "EDU", value: 5 },
+        { source: "JEU", target: "INT", value: 4 },
+        { source: "ART", target: "RUR", value: 3 },
+        { source: "ART", target: "DIV", value: 3 },
+        { source: "TEC", target: "MOB", value: 4 },
+        { source: "TEC", target: "EDU", value: 3 },
+        { source: "AGR", target: "ALI", value: 3 },
+        { source: "HAB", target: "RUR", value: 2 },
+        { source: "SAN", target: "SEN", value: 3 },
+        { source: "ALI", target: "RUR", value: 2 }
+      ]
+    };
+    
+    // Create Tooltip
+    const tooltip = d3.select("body")
+      .append("div")
+      .attr("class", "tooltip")
+      .style("position", "absolute")
+      .style("background", "rgba(0, 0, 0, 0.8)")
+      .style("color", "white")
+      .style("padding", "8px 12px")
+      .style("border-radius", "4px")
+      .style("font-size", "14px")
+      .style("pointer-events", "none")
+      .style("opacity", 0)
+      .style("z-index", 1000)
+      .style("transition", "all 0.3s ease");
+    
+    // Create Bubble Chart
+    function createBubbleChart() {
+      const container = document.getElementById("bubble-chart");
+      if (!container) return;
+      
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      
+      const svg = d3.select("#bubble-chart")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+      
+      // Define colors
+      const color = d3.scaleOrdinal()
+        .domain([0, 1, 2, 3, 4])
+        .range(["#2A5298", "#E63946", "#2EC4B6", "#9b59b6", "#e67e22"]);
+      
+      // Create simulation
+      const simulation = d3.forceSimulation(networkData.nodes)
+        .force("link", d3.forceLink(networkData.links).id(d => d.id).distance(d => 120 - d.value * 3))
+        .force("charge", d3.forceManyBody().strength(-200))
+        .force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(d => d.size * 1.5 + 5));
+      
+      // Draw links
+      const link = svg.append("g")
+        .selectAll("line")
+        .data(networkData.links)
+        .join("line")
+        .attr("stroke", d => {
+          const sourceGroup = networkData.nodes.find(n => n.id === d.source.id || n.id === d.source).group;
+          return d3.color(color(sourceGroup)).darker(0.5);
+        })
+        .attr("stroke-opacity", 0.6)
+        .attr("stroke-width", d => Math.sqrt(d.value));
+      
+      // Draw nodes
+      const node = svg.append("g")
+        .selectAll("circle")
+        .data(networkData.nodes)
+        .join("circle")
+        .attr("r", d => d.size)
+        .attr("fill", d => {
+          const c = d3.color(color(d.group));
+          return d.group === 0 ? c : c.brighter(0.2);
+        })
+        .attr("stroke", d => d3.color(color(d.group)).darker(0.8))
+        .attr("stroke-width", 2)
+        .on("mouseover", function(event, d) {
+          tooltip.style("opacity", 1)
+            .html(`<strong>${d.name}</strong>`)
+            .style("left", (event.pageX + 10) + "px")
+            .style("top", (event.pageY - 15) + "px");
+            
+          // Highlight connected nodes
+          node.style("opacity", n => {
+            if (n === d) return 1;
+            if (isConnected(d, n)) return 1;
+            return 0.3;
+          });
+          
+          link.style("opacity", l => {
+            if (l.source === d || l.target === d) return 1;
+            return 0.1;
+          });
+        })
+        .on("mouseout", function() {
+          tooltip.style("opacity", 0);
+          node.style("opacity", 1);
+          link.style("opacity", 0.6);
+        })
+        .call(d3.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
+      
+      // Add node labels
+      const text = svg.append("g")
+        .selectAll("text")
+        .data(networkData.nodes)
+        .join("text")
+        .text(d => d.id)
+        .attr("font-size", d => Math.max(d.size / 1.5, 10))
+        .attr("text-anchor", "middle")
+        .attr("dy", ".35em")
+        .attr("pointer-events", "none")
+        .attr("fill", d => d.group === 0 ? "#fff" : "#333")
+        .attr("font-weight", d => d.group === 0 ? "bold" : "normal");
+      
+      // Helper function to check if nodes are connected
+      function isConnected(a, b) {
+        return networkData.links.some(l => 
+          (l.source === a && l.target === b) || 
+          (l.source === b && l.target === a) ||
+          (l.source.id === a.id && l.target.id === b.id) ||
+          (l.source.id === b.id && l.target.id === a.id)
+        );
+      }
+      
+      // Update positions on simulation tick
+      simulation.on("tick", () => {
+        link
+          .attr("x1", d => Math.max(d.source.size, Math.min(width - d.source.size, d.source.x)))
+          .attr("y1", d => Math.max(d.source.size, Math.min(height - d.source.size, d.source.y)))
+          .attr("x2", d => Math.max(d.target.size, Math.min(width - d.target.size, d.target.x)))
+          .attr("y2", d => Math.max(d.target.size, Math.min(height - d.target.size, d.target.y)));
+          
+        node
+          .attr("cx", d => Math.max(d.size, Math.min(width - d.size, d.x)))
+          .attr("cy", d => Math.max(d.size, Math.min(height - d.size, d.y)));
+          
+        text
+          .attr("x", d => Math.max(d.size, Math.min(width - d.size, d.x)))
+          .attr("y", d => Math.max(d.size, Math.min(height - d.size, d.y)));
+      });
+      
+      // Drag functions
+      function dragstarted(event, d) {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      }
+      
+      function dragged(event, d) {
+        d.fx = event.x;
+        d.fy = event.y;
+      }
+      
+      function dragended(event, d) {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      }
+    }
+    
+    // On document ready
+    document.addEventListener("DOMContentLoaded", function() {
+      createBubbleChart();
+      
+      // Add smooth scrolling to all links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // Close mobile menu if open
+            closeMenu();
+            
+            // Calculate header height for offset
+            const headerHeight = document.getElementById('header').offsetHeight;
+            
+            window.scrollTo({
+              top: targetElement.offsetTop - headerHeight,
+              behavior: 'smooth'
+            });
+            
+            // Update URL hash without scrolling
+            history.pushState(null, null, targetId);
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item a').forEach(link => {
+              link.classList.remove('active');
+            });
+            this.classList.add('active');
+          }
+        });
+      });
+      
+      // Intersection Observer for fade-in animations
+      const fadeElements = document.querySelectorAll('.fade-in, .fade-in-up, .fade-in-left, .fade-in-right');
+      
+      const fadeObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0) translateX(0)';
+            fadeObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.2
+      });
+      
+      fadeElements.forEach(element => {
+        element.style.opacity = '0';
+        element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        
+        if (element.classList.contains('fade-in-up')) {
+          element.style.transform = 'translateY(20px)';
+        } else if (element.classList.contains('fade-in-left')) {
+          element.style.transform = 'translateX(-20px)';
+        } else if (element.classList.contains('fade-in-right')) {
+          element.style.transform = 'translateX(20px)';
+        }
+        
+        fadeObserver.observe(element);
+      });
+      
+      // Set active nav item based on scroll position
+      function setActiveNavItem() {
+        const sections = document.querySelectorAll('section');
+        const headerHeight = document.getElementById('header').offsetHeight;
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - headerHeight - 100;
+          const sectionHeight = section.offsetHeight;
+          const id = section.getAttribute('id');
+          
+          if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+            document.querySelectorAll('.nav-item a').forEach(link => {
+              link.classList.remove('active');
+              if (link.getAttribute('href') === `#${id}`) {
+                link.classList.add('active');
+              }
+            });
+          }
+        });
+      }
+      
+      window.addEventListener('scroll', setActiveNavItem);
+      setActiveNavItem();
+    });
+  </script>
+</body>
+</html>
