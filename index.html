@@ -156,12 +156,9 @@
       font-weight: 700;
       font-size: 1.5rem;
       color: var(--primary);
+      text-decoration: none; /* Ensures no text underline */
     }
-    
-    .logo span {
-      color: var(--secondary);
-    }
-    
+
     .nav {
       display: flex;
       align-items: center;
@@ -932,6 +929,9 @@
       font-weight: 700;
       color: var(--neutral-100);
       margin-bottom: var(--space-md);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
     }
     
     .footer-logo span {
@@ -1230,9 +1230,9 @@
   <header class="header" id="header">
     <div class="container">
       <div class="header-container">
+        <!-- Logo replaced with logo.jpg -->
         <a href="#" class="logo">
-          <i class="fas fa-network-wired"></i> 
-          <span>F</span>UN
+          <img src="logo.jpg" alt="FUN Logo" style="height: 40px;" />
         </a>
         <nav class="nav">
           <ul class="nav-list">
@@ -1256,9 +1256,11 @@
   
   <!-- Mobile Navigation -->
   <div class="mobile-nav" id="mobile-nav">
- <a href="#" class="logo">
-    <img src="logo.jpg" alt="Logo" />
-  </a>
+    <div class="mobile-nav-header">
+      <!-- Logo replaced with logo.jpg -->
+      <a href="#" class="logo">
+        <img src="logo.jpg" alt="FUN Logo" style="height: 40px;" />
+      </a>
       <button class="close-menu-btn" id="close-menu-btn" aria-label="Fermer le menu">
         <i class="fas fa-times"></i>
       </button>
@@ -1697,8 +1699,10 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-column">
+          <!-- Logo replaced with logo.jpg -->
           <div class="footer-logo">
-            <i class="fas fa-network-wired"></i> <span>F</span>UN
+            <img src="logo.jpg" alt="FUN Logo" style="height: 35px;" />
+            <span>FUN</span>
           </div>
           <p class="footer-description">
             La Fédération Union Nationale est un groupement de collectifs, associations et individus engagés pour un avenir meilleur et plus solidaire.
